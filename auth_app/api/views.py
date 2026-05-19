@@ -20,6 +20,7 @@ class RegisterView(APIView):
                     "message": "User created successfully",
                     "user": {
                         "username": user.username,
+                        "fullname": user.first_name,
                         "email": user.email
                     }
                 },

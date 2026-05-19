@@ -9,24 +9,24 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["fullname", "email", "password", "repeated_password"]
+        fields = ["username", "fullname", "email", "password", "repeated_password"]
 
     def validate(self, attrs):
         if attrs["password"] != attrs["repeated_password"]:
             raise serializers.ValidationError("Passwords do not match")
         return attrs
 
+    
     def create(self, validated_data):
-        fullname = validated_data["fullname"]
-        password = validated_data["password"]
-
-        user = User(
-            username=fullname,
-            email=validated_data["email"]
+        user = User.objects.create_user(
+            username=validated_data["username"],
+            email=validated_data.get("email", ""),
+            password=validated_data["password"]
         )
-
-        user.set_password(password)
+        
+        user.first_name = validated_data["fullname"]
         user.save()
+        
         return user
     
 
