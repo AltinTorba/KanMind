@@ -1,5 +1,5 @@
-from rest_framework import serializers
 from django.contrib.auth.models import User
+from rest_framework import serializers
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -9,27 +9,39 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["username", "fullname", "email", "password", "repeated_password"]
+        fields = [
+            "fullname",
+            "email",
+            "password",
+            "repeated_password"
+        ]
 
     def validate(self, attrs):
         if attrs["password"] != attrs["repeated_password"]:
-            raise serializers.ValidationError("Passwords do not match")
+            raise serializers.ValidationError(
+                "Passwords do not match"
+            )
+
+        if User.objects.filter(email=attrs["email"]).exists():
+            raise serializers.ValidationError(
+                "Email already exists"
+            )
+
         return attrs
 
-    
     def create(self, validated_data):
         user = User.objects.create_user(
-            username=validated_data["username"],
-            email=validated_data.get("email", ""),
+            username=validated_data["email"],
+            email=validated_data["email"],
             password=validated_data["password"]
         )
-        
+
         user.first_name = validated_data["fullname"]
         user.save()
-        
+
         return user
-    
+
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
