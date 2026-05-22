@@ -1,196 +1,379 @@
 # KanMind Backend API
 
-## 📌 Project Description
-KanMind is a backend API built with Django and Django REST Framework.
+## 📌 Project Overview
 
-The project provides authentication, board management, and task management functionality for a Kanban-style productivity system.
+KanMind is a Kanban-style backend API built with Django and Django REST Framework.
 
-It implements a multi-user architecture with authentication, authorization, and user-scoped data access.
+The project provides a complete multi-user task and board management system with authentication, authorization, board collaboration, task assignment, commenting functionality, and secure user-scoped access control.
 
----
-
-## 🏗️ Tech Stack
-- Python
-- Django
-- Django REST Framework
-- DRF Token Authentication
-- SQLite
+The backend follows RESTful API principles and is designed to integrate with an existing frontend application.
 
 ---
 
-## 📁 Project Structure
-- auth_app → authentication system (registration/login/token)
-- kanban_app → boards management system
-- tasks_app → tasks and comments system
+# 🏗️ Tech Stack
+
+* Python
+* Django
+* Django REST Framework
+* DRF Token Authentication
+* SQLite
 
 ---
 
-## 🔐 Authentication
-The API uses Token Authentication.
+# 📁 Project Architecture
 
-All protected endpoints require:
+## Applications
+
+### auth_app
+
+Handles:
+
+* registration
+* login
+* token authentication
+* email validation
+
+### kanban_app
+
+Handles:
+
+* board management
+* board membership
+* board statistics
+* board ownership
+
+### tasks_app
+
+Handles:
+
+* task management
+* task assignments
+* task reviews
+* comments system
+
+---
+
+# 🔐 Authentication
+
+The API uses DRF Token Authentication.
+
+Protected endpoints require:
 
 Authorization: Token <your_token>
 
+---
+
+# 👤 User Features
+
 Users can:
-- register
-- login
-- receive authentication tokens
-- access protected endpoints
+
+* register
+* login
+* receive authentication tokens
+* create boards
+* join boards as members
+* create and manage tasks
+* assign reviewers and assignees
+* create and delete comments
+* access only authorized resources
 
 ---
 
-## 📡 API Endpoints
+# 📡 API Endpoints
 
-### 🔑 Authentication
+# 🔑 Authentication
 
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | /api/registration/ | Register new user |
-| POST | /api/login/ | Login and receive token |
-
----
-
-### 📊 Boards
-
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | /api/boards/ | List boards |
-| POST | /api/boards/ | Create board |
-| PUT/PATCH | /api/boards/<id>/ | Update board |
-| DELETE | /api/boards/<id>/ | Delete board |
+| Method | Endpoint                                                      | Description                   |
+| ------ | ------------------------------------------------------------- | ----------------------------- |
+| POST   | /api/registration/                                            | Register new user             |
+| POST   | /api/login/                                                   | Login and receive token       |
+| GET    | /api/email-check/?email=[test@test.com](mailto:test@test.com) | Check whether an email exists |
 
 ---
 
-### ✅ Tasks
+# 📊 Boards
 
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | /api/tasks/ | List user-accessible tasks |
-| POST | /api/tasks/ | Create task (board member only) |
-| GET | /api/tasks/<id>/ | Retrieve task |
-| PUT/PATCH | /api/tasks/<id>/ | Update task |
-| DELETE | /api/tasks/<id>/ | Delete task |
-
----
-
-## 🔐 Authorization Model
-
-The system implements a multi-layer security architecture:
-
-### 1. Authentication Layer
-- IsAuthenticated required for all protected endpoints
-
-### 2. Read Access Control
-Tasks are filtered per authenticated user:
-
-board__members=self.request.user
-
-### 3. Write Access Control
-Task creation is restricted to board members only:
-
-if self.request.user not in board.members.all():
-    raise PermissionError("Not allowed")
+| Method | Endpoint          | Description            |
+| ------ | ----------------- | ---------------------- |
+| GET    | /api/boards/      | List accessible boards |
+| POST   | /api/boards/      | Create board           |
+| GET    | /api/boards/{id}/ | Retrieve board details |
+| PATCH  | /api/boards/{id}/ | Update board           |
+| DELETE | /api/boards/{id}/ | Delete board           |
 
 ---
 
-## 🧠 Business Logic
+# ✅ Tasks
 
-### Board Model
-- title
-- owner (ForeignKey → User)
-- members (ManyToMany → User)
-
-### Task Model
-- title
-- description
-- status
-- board (ForeignKey → Board)
-- assignee (optional ForeignKey → User)
+| Method | Endpoint         | Description           |
+| ------ | ---------------- | --------------------- |
+| GET    | /api/tasks/      | List accessible tasks |
+| POST   | /api/tasks/      | Create task           |
+| GET    | /api/tasks/{id}/ | Retrieve task         |
+| PATCH  | /api/tasks/{id}/ | Update task           |
+| DELETE | /api/tasks/{id}/ | Delete task           |
 
 ---
 
-## 🔑 Authentication Example
+# 📌 Task Filters
 
-Authorization: Token your_token_here
-
----
-
-## ⚙️ Key Features Implemented
-
-### Authentication System
-- User registration
-- Login with token generation
-- Password hashing (Django built-in)
-- Secure authentication flow
-
-### Board System
-- Board CRUD operations
-- Owner-based structure
-- Member relationships
-
-### Task System
-- Full CRUD operations
-- User-scoped queryset filtering
-- Board membership validation
-- Secure task creation rules
+| Method | Endpoint                   | Description                                |
+| ------ | -------------------------- | ------------------------------------------ |
+| GET    | /api/tasks/assigned_to_me/ | Tasks assigned to authenticated user       |
+| GET    | /api/tasks/reviewing/      | Tasks where authenticated user is reviewer |
 
 ---
 
-## 🚧 Future Improvements
-- Role-based access control (Owner / Member / Admin)
-- Task assignment (assignee workflow)
-- Task status workflow (Kanban stages)
-- Comments system
-- Activity logging / audit trail
+# 💬 Comments
+
+| Method | Endpoint                                    | Description            |
+| ------ | ------------------------------------------- | ---------------------- |
+| GET    | /api/tasks/{task_id}/comments/              | List comments for task |
+| POST   | /api/tasks/{task_id}/comments/              | Create comment         |
+| DELETE | /api/tasks/{task_id}/comments/{comment_id}/ | Delete comment         |
 
 ---
 
-## ⚙️ Setup Instructions
+# 🧠 Core Business Logic
 
-### 1. Clone repository
+## Board Access Logic
+
+Boards are only visible if the authenticated user:
+
+* is the owner
+* or is a board member
+
+---
+
+## Task Access Logic
+
+Tasks are only visible if the authenticated user belongs to the related board.
+
+---
+
+## Task Creation Rules
+
+Only board members are allowed to create tasks inside a board.
+
+---
+
+## Comment Rules
+
+Comments belong to tasks and contain:
+
+* author
+* content
+* timestamp
+
+---
+
+# 🧩 Data Models
+
+## Board
+
+* title
+* owner
+* members
+
+### Additional Statistics
+
+* member_count
+* ticket_count
+* tasks_to_do_count
+* tasks_high_prio_count
+
+---
+
+## Task
+
+* title
+* description
+* status
+* priority
+* due_date
+* assignee
+* reviewer
+* board
+
+---
+
+## Comment
+
+* task
+* author
+* content
+* created_at
+
+---
+
+# 🔐 Permissions & Security
+
+## Authentication Layer
+
+* IsAuthenticated permissions for protected routes
+
+## Membership Filtering
+
+Users can only access:
+
+* boards they belong to
+* tasks inside accessible boards
+
+## Ownership Logic
+
+Board ownership is automatically assigned during creation.
+
+## Secure Querysets
+
+All querysets are filtered per authenticated user.
+
+---
+
+# ⚡ Features Implemented
+
+## Authentication System
+
+* registration
+* login
+* token generation
+* password hashing
+
+## Board System
+
+* board CRUD
+* member management
+* board statistics
+* ownership structure
+
+## Task System
+
+* task CRUD
+* assignee workflow
+* reviewer workflow
+* due dates
+* filtered endpoints
+
+## Comment System
+
+* create comments
+* delete comments
+* task-related comments
+
+## Serializer Enhancements
+
+* nested mini user serializers
+* custom computed fields
+* mentor-compatible response structures
+
+---
+
+# 📊 Example Board Response
+
+```json
+[
+  {
+    "id": 11,
+    "title": "Test Board",
+    "member_count": 1,
+    "ticket_count": 5,
+    "tasks_to_do_count": 5,
+    "tasks_high_prio_count": 5,
+    "owner_id": 12
+  }
+]
+```
+
+---
+
+# ⚙️ Setup Instructions
+
+## 1. Clone Repository
+
+```bash
 git clone <repository_url>
+```
 
-### 2. Create virtual environment
+---
+
+## 2. Create Virtual Environment
+
+```bash
 python -m venv venv
+```
 
-### 3. Activate virtual environment
+---
 
-Windows:
+## 3. Activate Virtual Environment
+
+### Windows
+
+```bash
 venv\Scripts\activate
+```
 
-Linux / macOS:
+### Linux / macOS
+
+```bash
 source venv/bin/activate
+```
 
-### 4. Install dependencies
+---
+
+## 4. Install Dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
-### 5. Run migrations
+---
+
+## 5. Apply Migrations
+
+```bash
 python manage.py migrate
+```
 
-### 6. Start server
+---
+
+## 6. Start Development Server
+
+```bash
 python manage.py runserver
+```
 
 ---
 
-## 🧪 API Testing Tools
-- Postman
-- Insomnia
-- cURL
+# 🧪 API Testing
+
+The API was tested using:
+
+* Postman
+* Browser DevTools
+* Existing frontend integration
 
 ---
 
-## 🗄️ Database
-Default SQLite database:
-- db.sqlite3
+# 🗄️ Database
+
+Default database:
+
+* SQLite
 
 ---
 
-## 📌 Architecture Summary
+# 🏛️ Architectural Overview
 
-This project follows a RESTful layered architecture:
+The project follows a layered REST architecture:
 
-- Authentication layer (Token-based)
-- Authorization layer (Permissions + membership checks)
-- Business logic layer (ViewSets + serializers)
-- Data access layer (ORM filtering per user)
+* Authentication Layer
+* Authorization Layer
+* Business Logic Layer
+* Serializer Layer
+* ORM Data Layer
+
+The system emphasizes:
+
+* secure user-scoped data access
+* modular architecture
+* maintainable REST patterns
+* frontend-compatible API responses
