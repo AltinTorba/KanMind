@@ -45,3 +45,14 @@ class RegisterSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
+    
+    
+class UserEmailSerializer(serializers.ModelSerializer):
+    fullname = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = User
+        fields = ["id", "email", "fullname"]
+    
+    def get_fullname(self, obj):
+        return obj.get_full_name() or obj.username or obj.email

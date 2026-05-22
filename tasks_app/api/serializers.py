@@ -1,18 +1,28 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from tasks_app.models import Task
+from tasks_app.models import Task, Comment
 
 
 class UserMiniSerializer(serializers.ModelSerializer):
+    fullname = serializers.SerializerMethodField()
+    
     class Meta:
         model = User
-        fields = ["id", "username", "email"]
+        fields = ["id", "email", "fullname"]
+    
+    def get_fullname(self, obj):
+        if obj.first_name and obj.last_name:
+            return f"{obj.first_name} {obj.last_name}"
+        return obj.get_full_name() or obj.username or obj.email
 
 
 class TaskSerializer(serializers.ModelSerializer):
     assignee_id = serializers.IntegerField(required=False, allow_null=True, write_only=True)
     reviewer_id = serializers.IntegerField(required=False, allow_null=True, write_only=True)
     comments_count = serializers.SerializerMethodField()
+    
+    assignee = UserMiniSerializer(read_only=True)
+    reviewer = UserMiniSerializer(read_only=True)
 
     class Meta:
         model = Task
@@ -25,8 +35,10 @@ class TaskSerializer(serializers.ModelSerializer):
             "priority",
             "assignee",
             "reviewer",
+            "reviewer_id",
             "assignee_id",
             "reviewer_id",
+             "due_date", 
             "comments_count",
         ]
 
@@ -62,3 +74,19 @@ class TaskSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+    
+    
+class CommentSerializer(serializers.ModelSerializer):
+    author = UserMiniSerializer(read_only=True) 
+
+    class Meta:
+        model = Comment
+        fields = [
+            "id",
+            "created_at",
+            "author",
+            "content",
+        ]
+
+    def get_author(self, obj):
+        return obj.author.first_name
