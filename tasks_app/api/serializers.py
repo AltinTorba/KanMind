@@ -23,6 +23,8 @@ class TaskSerializer(serializers.ModelSerializer):
     
     assignee = UserMiniSerializer(read_only=True)
     reviewer = UserMiniSerializer(read_only=True)
+    
+    # board = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Task
@@ -77,8 +79,8 @@ class TaskSerializer(serializers.ModelSerializer):
     
     
 class CommentSerializer(serializers.ModelSerializer):
-    author = UserMiniSerializer(read_only=True) 
-
+    author = serializers.SerializerMethodField()
+    created_at = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%SZ", read_only=True)
     class Meta:
         model = Comment
         fields = [
@@ -89,4 +91,5 @@ class CommentSerializer(serializers.ModelSerializer):
         ]
 
     def get_author(self, obj):
-        return obj.author.first_name
+        author = obj.author
+        return author.get_full_name() or author.username or author.email
