@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import TaskViewSet, CommentListCreateView
 
 router = DefaultRouter()
-router.register(r"", TaskViewSet, basename="task") # Duhet basename, sepse route është bosh ("")
+router.register(r"", TaskViewSet, basename="task")
 
 urlpatterns = [
     path("", include(router.urls)),

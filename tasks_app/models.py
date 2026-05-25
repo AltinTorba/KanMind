@@ -1,12 +1,13 @@
+# 1. Django
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
-from kanban_app.models import Board
-from django.conf import settings
 
+# 3. Local imports
+from kanban_app.models import Board
 
 
 class Task(models.Model):
-    
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
 
@@ -56,15 +57,12 @@ class Task(models.Model):
         blank=True,
         related_name="review_tasks"
     )
-    
-    due_date = models.DateField(
-        null=True,
-        blank=True
-    )
+
+    due_date = models.DateField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -73,9 +71,14 @@ class Task(models.Model):
         related_name="created_tasks"
     )
 
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Task"
+        verbose_name_plural = "Tasks"
+
     def __str__(self):
         return self.title
-    
+
 
 class Comment(models.Model):
     task = models.ForeignKey(
@@ -92,12 +95,12 @@ class Comment(models.Model):
 
     content = models.TextField()
 
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ["created_at"]
+        verbose_name = "Comment"
+        verbose_name_plural = "Comments"
 
     def __str__(self):
         return f"{self.author.username} - {self.task.title}"

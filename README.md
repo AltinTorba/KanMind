@@ -83,54 +83,54 @@ Users can:
 
 # 🔑 Authentication
 
-| Method | Endpoint                                                      | Description                   |
-| ------ | ------------------------------------------------------------- | ----------------------------- |
-| POST   | /api/registration/                                            | Register new user             |
-| POST   | /api/login/                                                   | Login and receive token       |
-| GET    | /api/email-check/?email=[test@test.com](mailto:test@test.com) | Check whether an email exists |
+| Method | Endpoint | Description |
+| ------ | --------- | ----------- |
+| POST | /api/registration/ | Register new user |
+| POST | /api/login/ | Login and receive token |
+| GET | /api/email-check/?email=test@test.com | Check whether an email exists |
 
 ---
 
 # 📊 Boards
 
-| Method | Endpoint          | Description            |
-| ------ | ----------------- | ---------------------- |
-| GET    | /api/boards/      | List accessible boards |
-| POST   | /api/boards/      | Create board           |
-| GET    | /api/boards/{id}/ | Retrieve board details |
-| PATCH  | /api/boards/{id}/ | Update board           |
-| DELETE | /api/boards/{id}/ | Delete board           |
+| Method | Endpoint | Description |
+| ------ | --------- | ----------- |
+| GET | /api/boards/ | List accessible boards |
+| POST | /api/boards/ | Create board |
+| GET | /api/boards/{id}/ | Retrieve board details |
+| PATCH | /api/boards/{id}/ | Update board |
+| DELETE | /api/boards/{id}/ | Delete board |
 
 ---
 
 # ✅ Tasks
 
-| Method | Endpoint         | Description           |
-| ------ | ---------------- | --------------------- |
-| GET    | /api/tasks/      | List accessible tasks |
-| POST   | /api/tasks/      | Create task           |
-| GET    | /api/tasks/{id}/ | Retrieve task         |
-| PATCH  | /api/tasks/{id}/ | Update task           |
-| DELETE | /api/tasks/{id}/ | Delete task           |
+| Method | Endpoint | Description |
+| ------ | --------- | ----------- |
+| GET | /api/tasks/ | List accessible tasks |
+| POST | /api/tasks/ | Create task |
+| GET | /api/tasks/{id}/ | Retrieve task |
+| PATCH | /api/tasks/{id}/ | Update task |
+| DELETE | /api/tasks/{id}/ | Delete task |
 
 ---
 
 # 📌 Task Filters
 
-| Method | Endpoint                   | Description                                |
-| ------ | -------------------------- | ------------------------------------------ |
-| GET    | /api/tasks/assigned_to_me/ | Tasks assigned to authenticated user       |
-| GET    | /api/tasks/reviewing/      | Tasks where authenticated user is reviewer |
+| Method | Endpoint | Description |
+| ------ | --------- | ----------- |
+| GET | /api/tasks/assigned-to-me/ | Tasks assigned to authenticated user |
+| GET | /api/tasks/reviewing/ | Tasks where authenticated user is reviewer |
 
 ---
 
 # 💬 Comments
 
-| Method | Endpoint                                    | Description            |
-| ------ | ------------------------------------------- | ---------------------- |
-| GET    | /api/tasks/{task_id}/comments/              | List comments for task |
-| POST   | /api/tasks/{task_id}/comments/              | Create comment         |
-| DELETE | /api/tasks/{task_id}/comments/{comment_id}/ | Delete comment         |
+| Method | Endpoint | Description |
+| ------ | --------- | ----------- |
+| GET | /api/tasks/{task_id}/comments/ | List comments for task |
+| POST | /api/tasks/{task_id}/comments/ | Create comment |
+| DELETE | /api/tasks/{task_id}/comments/{comment_id}/ | Delete comment |
 
 ---
 
@@ -298,7 +298,7 @@ git clone <repository_url>
 ## 2. Create Virtual Environment
 
 ```bash
-python -m venv venv
+python -m venv env
 ```
 
 ---
@@ -308,13 +308,13 @@ python -m venv venv
 ### Windows
 
 ```bash
-venv\Scripts\activate
+env\Scripts\activate
 ```
 
 ### Linux / macOS
 
 ```bash
-source venv/bin/activate
+source env/bin/activate
 ```
 
 ---
@@ -327,7 +327,17 @@ pip install -r requirements.txt
 
 ---
 
-## 5. Apply Migrations
+## 5. Create Environment File
+
+Create a `.env` file in the root directory:
+
+```
+SECRET_KEY=your_secret_key_here
+```
+
+---
+
+## 6. Apply Migrations
 
 ```bash
 python manage.py migrate
@@ -335,7 +345,15 @@ python manage.py migrate
 
 ---
 
-## 6. Start Development Server
+## 7. Create Superuser (Optional)
+
+```bash
+python manage.py createsuperuser
+```
+
+---
+
+## 8. Start Development Server
 
 ```bash
 python manage.py runserver
@@ -345,11 +363,7 @@ python manage.py runserver
 
 # 🧪 API Testing
 
-The API was tested using:
-
-* Postman
-* Browser DevTools
-* Existing frontend integration
+The API was tested using Thunder Client (VS Code extension).
 
 ---
 
