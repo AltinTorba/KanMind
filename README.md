@@ -363,7 +363,8 @@ python manage.py runserver
 
 # 🧪 API Testing
 
-The API was tested using Thunder Client (VS Code extension).
+* Postman (Collection Runner)
+* The API was tested using Thunder Client (VS Code extension).
 
 ---
 
