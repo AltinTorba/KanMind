@@ -10,6 +10,55 @@ The backend follows RESTful API principles and is designed to integrate with an 
 
 ---
 
+## ⚙️ Setup Instructions
+
+### 1. Clone Repository
+```bash
+git clone <repository_url>
+cd KanMind
+```
+
+### 2. Create Virtual Environment
+```bash
+python -m venv env
+```
+
+### 3. Activate Virtual Environment
+**Windows:**
+```bash
+env\Scripts\activate
+```
+**Linux/macOS:**
+```bash
+source env/bin/activate
+```
+
+### 4. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Create Environment File
+```bash
+cp .env.template .env
+```
+Then edit `.env` and add your `SECRET_KEY`:
+```
+SECRET_KEY=your_secret_key_here
+```
+
+### 6. Apply Migrations
+```bash
+python manage.py migrate
+```
+
+### 7. Run Server
+```bash
+python manage.py runserver
+```
+
+---
+
 # 🏗️ Tech Stack
 
 * Python
@@ -281,82 +330,6 @@ All querysets are filtered per authenticated user.
     "owner_id": 12
   }
 ]
-```
-
----
-
-# ⚙️ Setup Instructions
-
-## 1. Clone Repository
-
-```bash
-git clone <repository_url>
-```
-
----
-
-## 2. Create Virtual Environment
-
-```bash
-python -m venv env
-```
-
----
-
-## 3. Activate Virtual Environment
-
-### Windows
-
-```bash
-env\Scripts\activate
-```
-
-### Linux / macOS
-
-```bash
-source env/bin/activate
-```
-
----
-
-## 4. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## 5. Create Environment File
-
-Create a `.env` file in the root directory:
-
-```
-SECRET_KEY=your_secret_key_here
-```
-
----
-
-## 6. Apply Migrations
-
-```bash
-python manage.py migrate
-```
-
----
-
-## 7. Create Superuser (Optional)
-
-```bash
-python manage.py createsuperuser
-```
-
----
-
-## 8. Start Development Server
-
-```bash
-python manage.py runserver
 ```
 
 ---
