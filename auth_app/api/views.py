@@ -1,17 +1,14 @@
-# 1. Django
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 
-# 2. Third-party (DRF)
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-# 3. Local imports
 from auth_app.api.serializers import (
     LoginSerializer,
     RegisterSerializer,
@@ -114,3 +111,5 @@ class EmailCheckView(APIView):
 
         serializer = UserEmailSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+

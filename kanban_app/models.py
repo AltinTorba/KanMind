@@ -1,4 +1,3 @@
-# 1. Django
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -24,3 +23,5 @@ class Board(models.Model):
 
     def __str__(self):
         return self.title
+
+

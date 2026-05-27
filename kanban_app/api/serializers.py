@@ -1,10 +1,7 @@
-# 1. Django
 from django.contrib.auth.models import User
 
-# 2. Third-party (DRF)
 from rest_framework import serializers
 
-# 3. Local imports
 from kanban_app.models import Board
 from tasks_app.models import Task
 
@@ -126,3 +123,5 @@ class BoardUpdateSerializer(serializers.ModelSerializer):
             "owner_data",
             "members_data",
         ]
+
+

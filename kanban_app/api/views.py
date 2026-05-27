@@ -1,14 +1,12 @@
-# 1. Django
 from django.db.models import Count, Q
+from django.http import Http404
 
-# 2. Third-party (DRF)
 from rest_framework import status
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, NotFound
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-# 3. Local imports
 from kanban_app.models import Board
 from .serializers import BoardSerializer, BoardDetailSerializer, BoardUpdateSerializer
 
@@ -73,3 +71,19 @@ class BoardViewSet(ModelViewSet):
 
         board.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    def get_object(self):
+        """Override get_object për të dalluar 404 vs 403"""
+        try:
+            board = Board.objects.get(pk=self.kwargs['pk'])
+        except Board.DoesNotExist:
+            raise NotFound(detail="Board not found")
+        
+        user = self.request.user
+        
+        if board.owner != user and user not in board.members.all():
+            raise PermissionDenied(detail="Not allowed")
+        
+        return board
+
+

@@ -5,3 +5,4 @@ from .views import BoardViewSet
 router = DefaultRouter()
 router.register(r"", BoardViewSet, basename="task")
 urlpatterns = router.urls
+

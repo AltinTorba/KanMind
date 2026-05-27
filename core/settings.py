@@ -1,11 +1,8 @@
-# 1. Standard library
 import os
 from pathlib import Path
 
-# 2. Third-party
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -125,3 +122,4 @@ CORS_ALLOW_HEADERS = [
     'x-csrftoken',
     'x-requested-with',
 ]
+

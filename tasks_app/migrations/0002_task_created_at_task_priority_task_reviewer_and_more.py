@@ -46,3 +46,5 @@ class Migration(migrations.Migration):
             field=models.CharField(choices=[('to-do', 'To Do'), ('in-progress', 'In Progress'), ('review', 'Review'), ('done', 'Done')], default='to-do', max_length=20),
         ),
     ]
+
+

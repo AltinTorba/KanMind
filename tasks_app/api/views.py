@@ -1,9 +1,7 @@
-# 1. Django
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
-# 2. Third-party (DRF)
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, PermissionDenied
@@ -12,7 +10,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-# 3. Local imports
 from tasks_app.models import Task, Comment
 from .serializers import TaskSerializer, CommentSerializer
 
@@ -24,30 +21,39 @@ class TaskViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        """Returns tasks belonging to boards the user owns or is a member of."""
+        """
+        Returns only tasks that belong to boards where the authenticated user
+        is either the owner or a member.
+        """
         user = self.request.user
         return Task.objects.filter(
             Q(board__owner=user) | Q(board__members=user)
         ).distinct()
 
     def get_object(self):
-        """Returns a task if it exists and the user has permission to access it."""
+        """
+        Overrides the default get_object method to distinguish between
+        404 (Not Found) and 403 (Forbidden) responses.
+
+        - If the task does not exist in the database → 404 Not Found
+        - If the user is not a member or owner of the board → 403 Forbidden
+        - For DELETE requests: only the board owner or task creator can delete → 403 Forbidden
+        """
         try:
             task = Task.objects.get(pk=self.kwargs['pk'])
         except Task.DoesNotExist:
             raise NotFound(detail="Task not found")
-
+        
         user = self.request.user
         board = task.board
-
-        if self.action in ['retrieve', 'update', 'partial_update']:
-            if board.owner != user and user not in board.members.all():
-                raise PermissionDenied(detail="Not allowed")
-
+        
+        if board.owner != user and user not in board.members.all():
+            raise PermissionDenied(detail="Not allowed")
+        
         if self.action == 'destroy':
             if board.owner != user and task.created_by != user:
                 raise PermissionDenied(detail="Not allowed")
-
+        
         return task
 
     def perform_create(self, serializer):
@@ -136,3 +142,5 @@ class CommentListCreateView(APIView):
 
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+

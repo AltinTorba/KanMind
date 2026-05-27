@@ -1,7 +1,5 @@
-# 1. Django
 from django.contrib.auth.models import User
 
-# 2. Third-party (DRF)
 from rest_framework import serializers
 
 
@@ -64,3 +62,5 @@ class UserEmailSerializer(serializers.ModelSerializer):
     def get_fullname(self, obj):
         """Returns the user's full name, username, or email as fallback."""
         return obj.first_name or obj.username or obj.email
+
+

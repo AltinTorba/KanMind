@@ -1,10 +1,7 @@
-# 1. Django
 from django.contrib.auth.models import User
 
-# 2. Third-party (DRF)
 from rest_framework import serializers
 
-# 3. Local imports
 from tasks_app.models import Task, Comment
 
 
@@ -107,3 +104,5 @@ class CommentSerializer(serializers.ModelSerializer):
         """Returns the author's full name, username, or email as fallback."""
         author = obj.author
         return author.get_full_name() or author.username or author.email
+
+

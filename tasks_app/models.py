@@ -1,9 +1,7 @@
-# 1. Django
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 
-# 3. Local imports
 from kanban_app.models import Board
 
 
@@ -104,3 +102,5 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.author.username} - {self.task.title}"
+
+
