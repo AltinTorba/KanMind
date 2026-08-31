@@ -1,6 +1,6 @@
 # KanMind Backend API
 
-## 📌 Project Overview
+## Project Overview
 
 KanMind is a Kanban-style backend API built with Django and Django REST Framework.
 
@@ -10,56 +10,68 @@ The backend follows RESTful API principles and is designed to integrate with an 
 
 ---
 
-## ⚙️ Setup Instructions
+## Setup Instructions
 
 ### 1. Clone Repository
+
 ```bash
 git clone <repository_url>
 cd KanMind
 ```
 
 ### 2. Create Virtual Environment
+
 ```bash
 python -m venv env
 ```
 
 ### 3. Activate Virtual Environment
+
 **Windows:**
+
 ```bash
 env\Scripts\activate
 ```
+
 **Linux/macOS:**
+
 ```bash
 source env/bin/activate
 ```
 
 ### 4. Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 5. Create Environment File
+
 ```bash
 cp .env.template .env
 ```
+
 Then edit `.env` and add your `SECRET_KEY`:
+
 ```
 SECRET_KEY=your_secret_key_here
 ```
 
 ### 6. Apply Migrations
+
 ```bash
 python manage.py migrate
 ```
 
 ### 7. Run Server
+
 ```bash
 python manage.py runserver
 ```
 
 ---
 
-# 🏗️ Tech Stack
+# Tech Stack
 
 * Python
 * Django
@@ -69,7 +81,7 @@ python manage.py runserver
 
 ---
 
-# 📁 Project Architecture
+# Project Architecture
 
 ## Applications
 
@@ -102,7 +114,7 @@ Handles:
 
 ---
 
-# 🔐 Authentication
+# Authentication
 
 The API uses DRF Token Authentication.
 
@@ -112,7 +124,7 @@ Authorization: Token <your_token>
 
 ---
 
-# 👤 User Features
+# User Features
 
 Users can:
 
@@ -128,9 +140,9 @@ Users can:
 
 ---
 
-# 📡 API Endpoints
+# API Endpoints
 
-# 🔑 Authentication
+# Authentication
 
 | Method | Endpoint | Description |
 | ------ | --------- | ----------- |
@@ -140,7 +152,7 @@ Users can:
 
 ---
 
-# 📊 Boards
+# Boards
 
 | Method | Endpoint | Description |
 | ------ | --------- | ----------- |
@@ -152,7 +164,7 @@ Users can:
 
 ---
 
-# ✅ Tasks
+# Tasks
 
 | Method | Endpoint | Description |
 | ------ | --------- | ----------- |
@@ -164,7 +176,7 @@ Users can:
 
 ---
 
-# 📌 Task Filters
+# Task Filters
 
 | Method | Endpoint | Description |
 | ------ | --------- | ----------- |
@@ -173,7 +185,7 @@ Users can:
 
 ---
 
-# 💬 Comments
+# Comments
 
 | Method | Endpoint | Description |
 | ------ | --------- | ----------- |
@@ -183,7 +195,7 @@ Users can:
 
 ---
 
-# 🧠 Core Business Logic
+# Core Business Logic
 
 ## Board Access Logic
 
@@ -216,7 +228,7 @@ Comments belong to tasks and contain:
 
 ---
 
-# 🧩 Data Models
+# Data Models
 
 ## Board
 
@@ -255,7 +267,7 @@ Comments belong to tasks and contain:
 
 ---
 
-# 🔐 Permissions & Security
+# Permissions & Security
 
 ## Authentication Layer
 
@@ -278,7 +290,7 @@ All querysets are filtered per authenticated user.
 
 ---
 
-# ⚡ Features Implemented
+# Features Implemented
 
 ## Authentication System
 
@@ -316,7 +328,7 @@ All querysets are filtered per authenticated user.
 
 ---
 
-# 📊 Example Board Response
+# Example Board Response
 
 ```json
 [
@@ -334,14 +346,14 @@ All querysets are filtered per authenticated user.
 
 ---
 
-# 🧪 API Testing
+# API Testing
 
 * Postman (Collection Runner)
 * Thunder Client (VS Code extension).
 
 ---
 
-# 🗄️ Database
+# Database
 
 Default database:
 
@@ -349,7 +361,7 @@ Default database:
 
 ---
 
-# 🏛️ Architectural Overview
+# Architectural Overview
 
 The project follows a layered REST architecture:
 
